@@ -54,5 +54,5 @@ app.get('/casas', (req, res) => {
 // Iniciar servidor
 app.listen(serverPort, () => {
   console.log(`⚡ Servidor Hogwarts iniciado em: http://localhost:${serverPort}`);
-  console.log(`🏰 Pronto para receber novos bruxos!`);
+  console.log(`🏰 API dos bruxos está no ar na porta 3000!`);
 });
