@@ -1,20 +1,26 @@
 {
   "name": "api_dos_bruxos",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cls && nodemon server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Jvsilvagomes/API_dos_Bruxos.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["SENAI", "Desenvolvimento de Sistemas ", "Bruxos", "Harry Potter", "BackEnd"],
+  "author": "João Victor",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Jvsilvagomes/API_dos_Bruxos/issues"
   },
   "homepage": "https://github.com/Jvsilvagomes/API_dos_Bruxos#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
 }
