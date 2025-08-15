@@ -1,4 +1,5 @@
 import express from "express";
+import bruxos from "./src/data/bruxos.js";
 
 const serverPort = 3000;
 const app = express();
@@ -50,6 +51,12 @@ app.get('/casas', (req, res) => {
     ]
   });
 });
+
+//Rota dos bruxos 
+
+app.get("/bruxos", (req, res) => {
+    res.json(bruxos)
+})
 
 // Iniciar servidor
 app.listen(serverPort, () => {
