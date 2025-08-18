@@ -1,8 +1,8 @@
 import express from "express";
 import bruxos from "./src/data/bruxos.js";
 
-const serverPort = 3000;
 const app = express();
+const serverPort = 4000;
 
 app.use(express.json());
 
@@ -41,15 +41,16 @@ app.get('/', (req, res) => {
 });
 
 // Rota das casas
-app.get('/casas', (req, res) => {
-  res.json({
-    casas: [
-      { nome: "Grifinória", animal: "🦁", fundador: "Godrico Gryffindor" },
-      { nome: "Sonserina", animal: "🐍", fundador: "Salazar Slytherin" },
-      { nome: "Corvinal", animal: "🦅", fundador: "Rowena Ravenclaw" },
-      { nome: "Lufa-lufa", animal: "🦡", fundador: "Helga Hufflepuff" }
-    ]
-  });
+app.get("/bruxos/casa/:casa", (req, res) => {
+  let casa = req.params.casa;
+  const bruxosDaCasa = bruxos.filter(b => b.casa.toLowerCase() === casa.toLowerCase());
+  if (bruxosDaCasa.length > 0) {
+    res.status(200).json(bruxosDaCasa);
+  } else {
+    res.status(404).json({
+      mensagem: "Nenhum bruxo encontrado nessa casa!"
+    })
+  }
 });
 
 //Rota dos bruxos 
@@ -59,22 +60,46 @@ app.get("/bruxos", (req, res) => {
 })
 
 app.get("/bruxos/:id", (req, res) =>{
-  const id = req.params.id;
+
+  let id = req.params.id;
 
   // Transforma id em numero
   id = parseInt(id)
   const bruxo = bruxos.find(b => b.id === id);
-  if(bruxo) {
-    res.status(200).json(bruxo)
-  } else {
-    res.status(400).json({
-      mensagem: "bruxo não encontrado"
-    })
-  }
-})
+
+       if (bruxo) {
+        res.json({
+            success: true,
+            message: `Bruxo ${bruxo.nome} encontrado! ⚡`,
+            data: bruxo
+        });
+    } else {
+        // Se não encontrou, retorna erro 404
+        res.status(404).json({
+            success: false,
+            error: "Bruxo não encontrado 😕",
+            message: `Nenhum bruxo com ID ${id} foi encontrado`,
+            codigo: "WIZARD_NOT_FOUND"
+        });
+    }
+});
 
 // Iniciar servidor
 app.listen(serverPort, () => {
   console.log(`⚡ Servidor Hogwarts iniciado em: http://localhost:${serverPort}`);
   console.log(`🏰 API dos bruxos está no ar na porta 3000!`);
 });
+// get by name
+app.get("/bruxos/:nome", (req, res) =>{
+  let nome = req.params.nome.toLowerCase();
+
+  const bruxosEncontrados = bruxos.filter(b => b.nome.toLowerCase().includes(nome));
+
+  if(bruxosEncontrados.length > 0){
+    res.status(200).json(bruxosEncontrados);
+  } else {
+    res.status(404).json({
+    mensagem: "Nome não encontrado"
+    })
+  }
+})
