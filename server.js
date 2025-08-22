@@ -1,12 +1,8 @@
-import express from "express";
+import express from "express"
 import bruxos from "./src/data/bruxos.js";
 
-const app = express();
-const serverPort = 4000;
-
-app.use(express.json());
-
-// Rota principal - Hogwarts
+const serverPort = 3000;
+const app = express().use(express.json());
 app.get('/', (req, res) => {
   res.send(`
     <div style="
@@ -53,53 +49,57 @@ app.get("/bruxos/casa/:casa", (req, res) => {
   }
 });
 
-//Rota dos bruxos 
-
-app.get("/bruxos", (req, res) => {
-    res.json(bruxos)
-})
-
-app.get("/bruxos/:id", (req, res) =>{
-
-  let id = req.params.id;
-
-  // Transforma id em numero
-  id = parseInt(id)
-  const bruxo = bruxos.find(b => b.id === id);
-
-       if (bruxo) {
-        res.json({
-            success: true,
-            message: `Bruxo ${bruxo.nome} encontrado! ⚡`,
-            data: bruxo
-        });
-    } else {
-        // Se não encontrou, retorna erro 404
-        res.status(404).json({
-            success: false,
-            error: "Bruxo não encontrado 😕",
-            message: `Nenhum bruxo com ID ${id} foi encontrado`,
-            codigo: "WIZARD_NOT_FOUND"
-        });
-    }
-});
-
-// Iniciar servidor
-app.listen(serverPort, () => {
-  console.log(`⚡ Servidor Hogwarts iniciado em: http://localhost:${serverPort}`);
-  console.log(`🏰 API dos bruxos está no ar na porta 3000!`);
-});
-// get by name
-app.get("/bruxos/:nome", (req, res) =>{
-  let nome = req.params.nome.toLowerCase();
-
-  const bruxosEncontrados = bruxos.filter(b => b.nome.toLowerCase().includes(nome));
-
-  if(bruxosEncontrados.length > 0){
-    res.status(200).json(bruxosEncontrados);
+app.get("/bruxos/vivos/", (req, res) => {
+  const resultado = bruxos.filter(b => b.status)
+  if(resultado) {
+    res.status(200).json(resultado)
   } else {
-    res.status(404).json({
-    mensagem: "Nome não encontrado"
+    res.status(404) ({
+      mensagem: "Nenhum bruxo vivo encontrado!"
     })
   }
 })
+app.get("/bruxos/mortos/", (req, res) => {
+  const resultado = bruxos.filter(b => !b.status)
+  if(resultado) {
+    res.status(200).json(resultado)
+  } else {
+    res.status(404) ({
+      mensagem: "Nenhum bruxo morto encontrado!"
+    })
+  }
+})
+
+app.get("/bruxos", (req, res) => {
+  res.json(bruxos);
+});
+app.get("/bruxos/id/:id", (req, res) => {
+  let id = req.params.id;
+  id = parseInt(id);
+  const bruxo = bruxos.find(b => b.id === id);
+  if (bruxo) {
+    res.status(200).json(bruxo);
+  } else {
+    res.status(404).json({
+      "error": "Bruxo não encontrado com esse id",
+    });
+  }
+});
+app.get("/bruxos/nome/:nome", (req, res) => {
+  let nome = req.params.nome.toLowerCase();
+  const bruxosEncontrados = bruxos.filter(b =>
+    b.nome.toLowerCase().includes(nome)
+  );
+  if (bruxosEncontrados.length > 0) {
+    res.status(200).json(bruxosEncontrados);
+  } else {
+    res.status(404).json({
+      mensagem: "Bruxo(s) não encontrado(s) com esse nome!"
+    });
+  }
+});
+// Iniciar servidor
+app.listen(serverPort, () => {
+  console.log(`⚡ Servidor Hogwarts iniciado em: http://localhost:${serverPort}`);
+  console.log(`🏰 Pronto para receber novos bruxos!`);
+});
