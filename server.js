@@ -1,5 +1,7 @@
-import express from "express"
-import bruxos from "./src/data/bruxos.js";
+import express from "express";
+import dados from "./src/data/dados.js";
+
+const {bruxos, varinhas, pocoes, mascotes} = dados;
 
 const serverPort = 3000;
 const app = express().use(express.json());
@@ -98,6 +100,61 @@ app.get("/bruxos/nome/:nome", (req, res) => {
     });
   }
 });
+
+// Rota das varinhas
+app.get("/varinhas", (req,res) =>{
+  res.status(200).json(varinhas);
+});
+
+app.get("/varinhas/id/:id", (req, res) => {
+  let id = req.params.id;
+  id = parseInt(id);
+  const varinha = varinhas.find(v => v.id === id);
+  if (varinha) {
+    res.status(200).json(varinha);
+  } else {
+    res.status(404).json({
+      "error": "varinha não encontrada com esse id",
+    });
+  }
+});
+
+// Rota dos mascotes
+app.get("/mascotes", (req,res) =>{
+  res.status(200).json(mascotes);
+});
+
+app.get("/mascotes/id/:id", (req, res) => {
+  let id = req.params.id;
+  id = parseInt(id);
+  const mascote = mascotes.find(m => m.id === id);
+  if (mascote) {
+    res.status(200).json(mascote);
+  } else {
+    res.status(404).json({
+      "error": "mascote não encontrado com esse id",
+    });
+  }
+});
+
+// Rota das pocoes
+app.get("/pocoes", (req,res) =>{
+  res.status(200).json(pocoes);
+});
+
+app.get("/pocoes/id/:id", (req, res) => {
+  let id = req.params.id;
+  id = parseInt(id);
+  const pocao = pocoes.find(p => p.id === id);
+  if (pocao) {
+    res.status(200).json(pocao);
+  } else {
+    res.status(404).json({
+      "error": "Poção não encontrada com esse id",
+    });
+  }
+});
+
 // Iniciar servidor
 app.listen(serverPort, () => {
   console.log(`⚡ Servidor Hogwarts iniciado em: http://localhost:${serverPort}`);

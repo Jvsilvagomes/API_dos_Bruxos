@@ -11,7 +11,13 @@
     "type": "git",
     "url": "git+https://github.com/Jvsilvagomes/API_dos_Bruxos.git"
   },
-  "keywords": ["SENAI", "Desenvolvimento de Sistemas ", "Bruxos", "Harry Potter", "BackEnd"],
+  "keywords": [
+    "SENAI",
+    "Desenvolvimento de Sistemas ",
+    "Bruxos",
+    "Harry Potter",
+    "BackEnd"
+  ],
   "author": "João Victor",
   "license": "MIT",
   "bugs": {
